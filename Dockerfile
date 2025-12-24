@@ -1,6 +1,6 @@
 FROM php:8.4-fpm-alpine
 
-# Dependências do sistema
+# Dependências do sistema + extensões PHP
 RUN apk add --no-cache \
     nginx \
     supervisor \
@@ -19,10 +19,10 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# Copia projeto
+# Copia o projeto
 COPY . .
 
-# Configurações do Composer via variável de ambiente segura
+# Configurações do Composer (Flux Pro) via secret
 ARG COMPOSER_AUTH
 ENV COMPOSER_AUTH=$COMPOSER_AUTH
 
@@ -32,16 +32,18 @@ RUN composer install --no-dev --optimize-autoloader
 # Build assets
 RUN npm install && npm run build
 
-# Nginx config
+# Configs do Nginx/Supervisor
 COPY .render/nginx.conf /etc/nginx/nginx.conf
-
-# Supervisor config
 COPY .render/supervisord.conf /etc/supervisord.conf
 
-# Permissões
+# Script de start (migrate + start services)
+RUN chmod +x /var/www/html/start.sh
+
+# Permissões (importante pra logs/cache)
 RUN mkdir -p storage bootstrap/cache \
-    && chmod -R 775 storage bootstrap/cache
+    && chmod -R 775 storage bootstrap/cache \
+    && chown -R www-data:www-data storage bootstrap/cache
 
 EXPOSE 10000
 
-CMD ["/usr/bin/supervisord","-c","/etc/supervisord.conf"]
+CMD ["/var/www/html/start.sh"]
