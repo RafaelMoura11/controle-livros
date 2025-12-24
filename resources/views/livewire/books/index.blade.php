@@ -4,7 +4,6 @@
             <flux:input
                 wire:model.live="search"
                 placeholder="Buscar por título, autor ou ISBN..."
-                label="Buscar"
             />
         </div>
 
@@ -19,7 +18,9 @@
                 <flux:table.column>Título</flux:table.column>
                 <flux:table.column>Autor</flux:table.column>
                 <flux:table.column>Status</flux:table.column>
-                <flux:table.column class="text-right">Ações</flux:table.column>
+                <flux:table.column class="text-right">
+                    <div class="flex justify-end">Ações</div>
+                </flux:table.column>
             </flux:table.columns>
 
             <flux:table.rows>
@@ -42,7 +43,7 @@
                         </flux:table.cell>
 
                         <flux:table.cell class="text-right">
-                            <div class="flex gap-2 justify-end">
+                            <div class="flex gap-2">
                                 <flux:button variant="ghost" href="{{ route('books.show', $book) }}">
                                     Ver
                                 </flux:button>
