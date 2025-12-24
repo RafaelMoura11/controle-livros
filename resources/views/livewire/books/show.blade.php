@@ -38,6 +38,11 @@
                 {{ $book->isbn ?? '—' }}
             </div>
 
+            <div>
+                <strong>Editora:</strong>
+                {{ $book->publisher ?? '—' }}
+            </div>
+
             @if ($book->notes)
                 <div>
                     <strong>Notas:</strong>

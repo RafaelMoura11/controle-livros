@@ -13,6 +13,7 @@
         <div class="p-6 space-y-4">
             <flux:input label="Título" wire:model="title" />
             <flux:input label="Autor" wire:model="author" />
+            <flux:input label="Editora" wire:model="publisher" />
             <flux:input label="ISBN" wire:model="isbn" />
             <flux:textarea label="Notas" wire:model="notes" />
 

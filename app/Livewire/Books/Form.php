@@ -12,6 +12,7 @@ class Form extends Component
     public string $title = '';
     public ?string $author = null;
     public ?string $isbn = null;
+    public ?string $publisher = null;
     public ?string $notes = null;
 
     public function mount(?Book $book = null): void
@@ -22,6 +23,7 @@ class Form extends Component
             $this->title = $book->title;
             $this->author = $book->author;
             $this->isbn = $book->isbn;
+            $this->publisher = $book->publisher;
             $this->notes = $book->notes;
         }
     }
@@ -32,6 +34,7 @@ class Form extends Component
             'title' => ['required', 'string', 'max:255'],
             'author' => ['nullable', 'string', 'max:255'],
             'isbn' => ['nullable', 'string', 'max:255'],
+            'publisher' => ['nullable', 'string', 'max:255'],
             'notes' => ['nullable', 'string'],
         ]);
 

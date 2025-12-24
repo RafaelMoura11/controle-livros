@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Book extends Model
 {
-    protected $fillable = ['title', 'author', 'isbn', 'notes'];
+    protected $fillable = ['title', 'author', 'isbn', 'publisher', 'notes'];
+    
 
     public function loans(): HasMany
     {

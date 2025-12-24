@@ -25,8 +25,9 @@ class Index extends Component
             ->with('activeLoan')
             ->when($this->search, fn ($q) =>
                 $q->where('title', 'like', "%{$this->search}%")
-                  ->orWhere('author', 'like', "%{$this->search}%")
-                  ->orWhere('isbn', 'like', "%{$this->search}%")
+                ->orWhere('author', 'like', "%{$this->search}%")
+                ->orWhere('isbn', 'like', "%{$this->search}%")
+                ->orWhere('publisher', 'like', "%{$this->search}%")
             )
             ->orderBy('title')
             ->paginate(10);
