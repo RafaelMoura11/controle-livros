@@ -22,6 +22,10 @@ WORKDIR /var/www/html
 # Copia projeto
 COPY . .
 
+# Configurações do Composer via variável de ambiente segura
+ARG COMPOSER_AUTH
+ENV COMPOSER_AUTH=$COMPOSER_AUTH
+
 # Instala dependências PHP
 RUN composer install --no-dev --optimize-autoloader
 
