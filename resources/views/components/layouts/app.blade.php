@@ -8,13 +8,41 @@
 
     @fluxAppearance
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
     @livewireStyles
 </head>
-<body class="min-h-screen">
-    {{ $slot }}
+<body class="min-h-screen bg-zinc-950 text-zinc-100">
 
-    @fluxScripts
-    @livewireScripts
+<div class="flex min-h-screen">
+
+    {{-- Sidebar --}}
+    <aside class="w-64 border-r border-zinc-800 p-4">
+        <flux:navlist class="w-full">
+            <flux:navlist.item
+                href="{{ route('books.index') }}"
+                icon="book-open"
+                :active="request()->routeIs('books.*')"
+            >
+                Livros
+            </flux:navlist.item>
+
+            <flux:navlist.item
+                href="{{ route('loans.index') }}"
+                icon="calendar-days"
+                :active="request()->routeIs('loans.*')"
+            >
+                Empréstimos
+            </flux:navlist.item>
+        </flux:navlist>
+    </aside>
+
+    {{-- Conteúdo --}}
+    <main class="flex-1 p-6">
+        {{ $slot }}
+    </main>
+
+</div>
+
+@fluxScripts
+@livewireScripts
 </body>
 </html>
