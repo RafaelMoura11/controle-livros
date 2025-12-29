@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="dark">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -45,4 +45,8 @@
 @fluxScripts
 @livewireScripts
 </body>
+<script>
+  localStorage.setItem('flux.appearance', 'dark');
+  document.documentElement.classList.remove('light');
+</script>
 </html>
