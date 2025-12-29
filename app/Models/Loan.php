@@ -9,6 +9,7 @@ class Loan extends Model
 {
     protected $fillable = [
         'book_id',
+        'contact_id',
         'borrower_name',
         'borrower_contact',
         'loaned_at',
@@ -31,5 +32,10 @@ class Loan extends Model
     public function isActive(): bool
     {
         return $this->returned_at === null;
+    }
+
+    public function contact(): BelongsTo
+    {
+        return $this->belongsTo(Contact::class);
     }
 }
