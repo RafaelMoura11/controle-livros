@@ -11,3 +11,10 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+.select-themed {
+  color-scheme: dark;        /* faz o dropdown seguir o dark em vários browsers */
+  background-color: #18181b; /* zinc-900 */
+  color: #fafafa;            /* zinc-50 */
+  border-color: #27272a;     /* zinc-800 */
+}
