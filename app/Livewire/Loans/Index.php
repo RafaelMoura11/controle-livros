@@ -3,6 +3,7 @@
 namespace App\Livewire\Loans;
 
 use App\Models\Book;
+use App\Models\Contact;
 use App\Models\Loan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -24,8 +25,7 @@ class Index extends Component
 
     // Form empréstimo
     public ?int $book_id = null;
-    public string $borrower_name = '';
-    public ?string $borrower_contact = null;
+    public ?int $contact_id = null;
     public ?string $loaned_at = null; // Y-m-d
     public ?string $due_at = null;    // Y-m-d
     public ?string $notes = null;
@@ -56,8 +56,7 @@ class Index extends Component
     {
         $data = $this->validate([
             'book_id' => ['required', 'integer', 'exists:books,id'],
-            'borrower_name' => ['required', 'string', 'max:255'],
-            'borrower_contact' => ['nullable', 'string', 'max:255'],
+            'contact_id' => ['required', 'integer', 'exists:contacts,id'],
             'loaned_at' => ['required', 'date'],
             'due_at' => ['required', 'date', 'after_or_equal:loaned_at'],
             'notes' => ['nullable', 'string'],
@@ -65,7 +64,10 @@ class Index extends Component
 
         DB::transaction(function () use ($data) {
             // trava o livro pra evitar corrida
-            $book = Book::query()->whereKey($data['book_id'])->lockForUpdate()->firstOrFail();
+            $book = Book::query()
+                ->whereKey($data['book_id'])
+                ->lockForUpdate()
+                ->firstOrFail();
 
             $alreadyLoaned = Loan::query()
                 ->where('book_id', $book->id)
@@ -78,10 +80,16 @@ class Index extends Component
                 ]);
             }
 
+            $contact = Contact::query()->findOrFail($data['contact_id']);
+
             Loan::create([
                 'book_id' => $book->id,
-                'borrower_name' => $data['borrower_name'],
-                'borrower_contact' => $data['borrower_contact'],
+                'contact_id' => $contact->id,
+
+                // Snapshot (historicamente útil)
+                'borrower_name' => $contact->name,
+                'borrower_contact' => $contact->phone ?? $contact->email,
+
                 'loaned_at' => $data['loaned_at'],
                 'due_at' => $data['due_at'],
                 'notes' => $data['notes'],
@@ -108,8 +116,7 @@ class Index extends Component
     private function resetLoanForm(): void
     {
         $this->book_id = null;
-        $this->borrower_name = '';
-        $this->borrower_contact = null;
+        $this->contact_id = null;
         $this->notes = null;
         $this->loaned_at = now()->toDateString();
         $this->due_at = now()->addDays(7)->toDateString();
@@ -120,7 +127,7 @@ class Index extends Component
         $today = now()->toDateString();
 
         $loans = Loan::query()
-            ->with(['book'])
+            ->with(['book', 'contact'])
             ->when($this->status === 'active', fn ($q) => $q->whereNull('returned_at'))
             ->when($this->status === 'returned', fn ($q) => $q->whereNotNull('returned_at'))
             ->when($this->status === 'overdue', fn ($q) => $q->whereNull('returned_at')->where('due_at', '<', $today))
@@ -128,8 +135,12 @@ class Index extends Component
                 $s = "%{$this->search}%";
                 $q->where(function ($q) use ($s) {
                     $q->where('borrower_name', 'like', $s)
-                      ->orWhere('borrower_contact', 'like', $s)
-                      ->orWhereHas('book', fn ($b) => $b->where('title', 'like', $s)->orWhere('author', 'like', $s)->orWhere('isbn', 'like', $s));
+                        ->orWhere('borrower_contact', 'like', $s)
+                        ->orWhereHas('book', fn ($b) =>
+                            $b->where('title', 'like', $s)
+                                ->orWhere('author', 'like', $s)
+                                ->orWhere('isbn', 'like', $s)
+                        );
                 });
             })
             ->orderByRaw("returned_at is null desc") // ativos primeiro
@@ -148,6 +159,15 @@ class Index extends Component
             'returned' => Loan::query()->whereNotNull('returned_at')->count(),
         ];
 
-        return view('livewire.loans.index', compact('loans', 'availableBooks', 'counts'));
+        $contacts = Contact::query()
+            ->orderBy('name')
+            ->get(['id', 'name', 'phone', 'email']);
+
+        return view('livewire.loans.index', compact(
+            'loans',
+            'availableBooks',
+            'counts',
+            'contacts'
+        ));
     }
 }

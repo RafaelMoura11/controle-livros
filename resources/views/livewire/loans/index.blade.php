@@ -3,7 +3,7 @@
     <div class="flex items-center justify-between gap-3">
         <div>
             <h1 class="text-2xl font-semibold">Empréstimos</h1>
-            <p class="text-sm text-zinc-400">Gerencie empréstimos, atrasos e devoluções.</p>
+            <p class="text-sm text-zinc-500">Gerencie empréstimos, atrasos e devoluções.</p>
         </div>
 
         <flux:button wire:click="openLoanModal">
@@ -21,7 +21,7 @@
 
         <select
             wire:model.live="status"
-            class="h-10 rounded-lg bg-zinc-900 border border-zinc-800 px-3 text-sm"
+            class="select-themed h-10 rounded-lg border px-3 text-sm"
         >
             <option value="active">Ativos ({{ $counts['active'] }})</option>
             <option value="overdue">Atrasados ({{ $counts['overdue'] }})</option>
@@ -48,14 +48,14 @@
                             <a class="underline" href="{{ route('books.show', $loan->book) }}">
                                 {{ $loan->book->title }}
                             </a>
-                            <div class="text-xs text-zinc-400">
+                            <div class="text-xs text-zinc-500">
                                 {{ $loan->book->author ?? '—' }}
                             </div>
                         </flux:table.cell>
 
                         <flux:table.cell>
                             <div>{{ $loan->borrower_name }}</div>
-                            <div class="text-xs text-zinc-400">{{ $loan->borrower_contact ?? '—' }}</div>
+                            <div class="text-xs text-zinc-500">{{ $loan->borrower_contact ?? '—' }}</div>
                         </flux:table.cell>
 
                         <flux:table.cell>{{ $loan->loaned_at?->format('d/m/Y') ?? '—' }}</flux:table.cell>
@@ -96,7 +96,7 @@
                 @empty
                     <flux:table.row>
                         <flux:table.cell colspan="6">
-                            <div class="p-4 text-sm text-zinc-400">
+                            <div class="p-4 text-sm text-zinc-500">
                                 Nenhum empréstimo encontrado.
                             </div>
                         </flux:table.cell>
@@ -117,11 +117,8 @@
                 <h2 class="text-lg font-semibold">Novo empréstimo</h2>
 
                 <div class="space-y-1">
-                    <label class="text-sm text-zinc-300">Livro</label>
-                    <select
-                        wire:model="book_id"
-                        class="w-full h-10 rounded-lg bg-zinc-900 border border-zinc-800 px-3 text-sm"
-                    >
+                    <label class="text-sm text-zinc-700">Livro</label>
+                    <select wire:model="book_id" class="select-themed w-full h-10 rounded-lg border px-3 text-sm">
                         <option value="">Selecione um livro disponível</option>
                         @foreach ($availableBooks as $b)
                             <option value="{{ $b->id }}">
@@ -131,29 +128,32 @@
                     </select>
 
                     @error('book_id')
-                        <div class="text-xs text-red-400">{{ $message }}</div>
+                        <div class="text-xs text-red-600">{{ $message }}</div>
                     @enderror
                 </div>
 
-                <flux:input
-                    label="Nome de quem está pegando"
-                    wire:model="borrower_name"
-                />
+                <div class="space-y-1">
+                    <label class="text-sm text-zinc-700">Contato</label>
+                    <select wire:model="contact_id" class="select-themed w-full h-10 rounded-lg border px-3 text-sm">
+                        <option value="">Selecione um contato</option>
+                        @foreach ($contacts as $c)
+                            <option value="{{ $c->id }}">
+                                {{ $c->name }}{{ $c->phone ? " — {$c->phone}" : '' }}
+                            </option>
+                        @endforeach
+                    </select>
 
-                <flux:input
-                    label="Contato (opcional)"
-                    wire:model="borrower_contact"
-                />
+                    @error('contact_id')
+                        <div class="text-xs text-red-600">{{ $message }}</div>
+                    @enderror
+                </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <flux:input type="date" label="Data do empréstimo" wire:model="loaned_at" />
                     <flux:input type="date" label="Data de devolução" wire:model="due_at" />
                 </div>
 
-                <flux:textarea
-                    label="Observações"
-                    wire:model="notes"
-                />
+                <flux:textarea label="Observações" wire:model="notes" />
 
                 <div class="flex justify-end gap-2">
                     <flux:button variant="ghost" wire:click="$set('showLoanModal', false)">
