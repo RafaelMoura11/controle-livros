@@ -32,6 +32,14 @@
             >
                 Empréstimos
             </flux:navlist.item>
+
+            <flux:navlist.item
+                href="{{ route('contacts.index') }}"
+                icon="user-group"
+                :active="request()->routeIs('contacts.*')"
+            >
+                Contatos
+            </flux:navlist.item>
         </flux:navlist>
     </aside>
 
