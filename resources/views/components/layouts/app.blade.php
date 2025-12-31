@@ -16,7 +16,7 @@
 
     {{-- Sidebar --}}
     <aside class="w-64 border-r border-zinc-800 p-4">
-        <flux:navlist class="w-full">
+        <flux:navlist class="w-full text-lg font-medium space-y-1">
             <flux:navlist.item
                 href="{{ route('books.index') }}"
                 icon="book-open"
