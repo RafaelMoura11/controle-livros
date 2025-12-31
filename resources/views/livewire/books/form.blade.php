@@ -1,4 +1,4 @@
-<div class="max-w-3xl mx-auto p-6 space-y-4">
+<div class="page-container page-stack">
     <div class="flex items-center justify-between">
         <h1 class="text-xl font-semibold">
             {{ $book ? 'Editar livro' : 'Novo livro' }}

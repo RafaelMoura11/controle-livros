@@ -1,4 +1,4 @@
-<div class="max-w-5xl mx-auto space-y-4">
+<div class="page-container page-stack">
     <div class="flex items-center justify-between gap-3">
         <div class="flex-1">
             <flux:input wire:model.live="search" placeholder="Buscar contato..." />

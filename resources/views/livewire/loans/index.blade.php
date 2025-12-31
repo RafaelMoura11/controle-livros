@@ -1,4 +1,4 @@
-<div class="max-w-6xl mx-auto space-y-4">
+<div class="page-container page-stack">
 
     <div class="flex items-center justify-between gap-3">
         <div>

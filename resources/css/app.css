@@ -18,3 +18,19 @@
   color: #fafafa;            /* zinc-50 */
   border-color: #27272a;     /* zinc-800 */
 }
+
+/* Container padrão das páginas com tabelas */
+.page-container {
+  max-width: 80rem; /* 1280px = equivalente ao max-w-7xl */
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem; /* 24px */
+  padding-right: 1.5rem; /* 24px */
+}
+
+/* Espaçamento padrão vertical */
+.page-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* 16px */
+}

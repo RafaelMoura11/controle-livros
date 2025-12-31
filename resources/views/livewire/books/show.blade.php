@@ -1,5 +1,4 @@
-<div class="max-w-4xl mx-auto p-6 space-y-6">
-
+<div class="page-container page-stack">
     {{-- Cabeçalho --}}
     <div class="flex items-center justify-between">
         <div>

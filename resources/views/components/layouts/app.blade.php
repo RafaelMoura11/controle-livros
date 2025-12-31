@@ -44,7 +44,7 @@
     </aside>
 
     {{-- Conteúdo --}}
-    <main class="flex-1 p-6">
+    <main class="flex-1 py-6">
         {{ $slot }}
     </main>
 
